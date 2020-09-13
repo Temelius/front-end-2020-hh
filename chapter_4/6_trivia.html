@@ -16,7 +16,11 @@
 
   <script type="text/babel">
     const Trivia = () => {
-      const [question, setQuestion] = React.useState('Press the button to get a question')
+      const [question, setQuestion] = React.useState('')
+
+      React.useEffect(() => {
+        getQuestion();
+      }, [])
 
       const getQuestion = () => {
         fetch('https://opentdb.com/api.php?amount=1&encode=url3986')
