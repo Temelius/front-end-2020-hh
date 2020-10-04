@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
+import TodoTable from './TodoTable.js'
 
 function Todolist () {
 
@@ -31,26 +32,9 @@ function Todolist () {
       <label>Date:</label>
       <input type="date" name="date" value={todo.date} onChange={inputChanged} />
       <button onClick={addTodo}>Add</button>
-      <table>
-        <tbody>
-          <tr>
-            <th>Description</th>
-            <th>Date</th>
-            <th></th>
-          </tr>
-          {
-            todos.map((todo, index) =>
-              <tr key={index}>
-                <td>{todo.desc}</td>
-                <td>{todo.date}</td>
-                <td><button onClick={() => deleteTodo(index)}>Delete</button></td>
-              </tr>
-            )
-          }
-        </tbody>
-      </table>
+      <TodoTable delete={deleteTodo} todos={todos}/>
     </div>
   )
 }
 
-export default Todolist;
+export default Todolist
