@@ -9,6 +9,7 @@ const TodoTable = (props) => {
           <tr>
             <th>Description</th>
             <th>Date</th>
+            <th>Priority</th>
             <th></th>
           </tr>
           {
@@ -16,6 +17,7 @@ const TodoTable = (props) => {
               <tr key={index}>
                 <td>{todo.desc}</td>
                 <td>{todo.date}</td>
+                <td>{todo.priority}</td>
                 <td><button onClick={() => props.delete(index)}>Delete</button></td>
               </tr>
             )

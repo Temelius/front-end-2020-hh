@@ -5,7 +5,8 @@ function Todolist () {
 
   const [todo, setTodo] = useState({
     desc: '',
-    date: ''
+    date: '',
+    priority: ''
   })
   const [todos, setTodos] = useState([])
 
@@ -15,7 +16,7 @@ function Todolist () {
 
   const addTodo = () => {
     setTodos([...todos, todo])
-    setTodo({desc:'',date:''})
+    setTodo({desc:'',date:'',priority:''})
   }
 
   const deleteTodo = (index) => {
@@ -31,6 +32,8 @@ function Todolist () {
       <input type="text" name="desc" value={todo.desc} onChange={inputChanged} />
       <label>Date:</label>
       <input type="date" name="date" value={todo.date} onChange={inputChanged} />
+      <label>Priority:</label>
+      <input type="text" name="priority" value={todo.priority} onChange={inputChanged} />
       <button onClick={addTodo}>Add</button>
       <TodoTable delete={deleteTodo} todos={todos}/>
     </div>
