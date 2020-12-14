@@ -19,15 +19,14 @@ const AddTraining = (props) => {
     activity: '',
     customer: props.params.value
   })
-  const [open, setOpen] = useState(false);
-  const [date, setDate] = useState(new Date());
-
+  const [open, setOpen] = useState(false)
+  const [date, setDate] = useState(new Date())
 
   const inputChanged = (event) => {
     setTraining({
       ...training,
       [event.target.name]: event.target.value
-    });
+    })
   }
 
   const handleChange = (date) => {
@@ -39,16 +38,16 @@ const AddTraining = (props) => {
   };
 
   const handleSave = () => {
-    props.addTraining(training);
+    props.addTraining(training)
     handleClose();
   }
 
   const handleClickOpen = () => {
-    setOpen(true);
+    setOpen(true)
   };
 
   const handleClose = () => {
-    setOpen(false);
+    setOpen(false)
   };
 
   return (
@@ -58,7 +57,7 @@ const AddTraining = (props) => {
       <Dialog open = {open}
               onClose = {handleClose}
               aria-labelledby = "form-dialog-title">
-        <DialogTitle id = "form-dialog-title"> New training </DialogTitle>
+        <DialogTitle id = "form-dialog-title">New training</DialogTitle>
         <DialogContent>
           <MuiPickersUtilsProvider utils = {DateFnsUtils}>
           <Grid container justify = 'space-around'>
