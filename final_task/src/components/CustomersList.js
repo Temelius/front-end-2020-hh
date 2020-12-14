@@ -1,0 +1,137 @@
+import React, { useState, useEffect, useRef } from 'react'
+
+import { AgGridReact } from 'ag-grid-react'
+import 'ag-grid-community/dist/styles/ag-grid.css'
+import 'ag-grid-community/dist/styles/ag-theme-material.css'
+import Button from '@material-ui/core/Button'
+import Snackbar from '@material-ui/core/Snackbar'
+
+import AddCustomer from './AddCustomer'
+import EditCustomer from './EditCustomer'
+
+import AddTraining from './AddTraining'
+
+const CustomersList = () => {
+
+  const [customers, setCustomers] = useState([])
+  const [open, setOpen] = useState(false)
+  const [msg, setMsg] = useState('')
+  const gridRef = useRef()
+
+  useEffect(() => {
+      getCustomers()
+  }, [])
+
+  const getCustomers = () => {
+      fetch('https://customerrest.herokuapp.com/api/customers')
+          .then(response => response.json())
+          .then(data => setCustomers(data.content))
+          .catch(err => console.error(err))
+  }
+
+
+  const deleteCustomer = (link) => {
+      if (window.confirm('Are you sure?')) {
+          fetch(link, {
+              method: 'DELETE'
+          })
+              .then(_ => gridRef.current.refreshCells({ rowNodes: getCustomers() }))
+              .then(_ => setMsg('Customer was deleted succesfully'))
+              .then(_ => setOpen(true))
+              .catch(err => console.error(err))
+      }
+  }
+
+  const addCustomer = (newCustomer) => {
+      fetch('https://customerrest.herokuapp.com/api/customers', {
+          method: 'POST',
+          headers: { 'Content-type': 'application/json' },
+          body: JSON.stringify(newCustomer)
+      })
+          .then(_ => gridRef.current.refreshCells({ rowNodes: getCustomers() }))
+          .catch(err => console.error(err))
+  }
+
+  const updateCustomer = (link, customer) => {
+      fetch(link, {
+          method: 'PUT',
+          headers: { 'Content-type': 'application/json' },
+          body: JSON.stringify(customer)
+      })
+          .then(_ => gridRef.current.refreshCells({ rowNodes: getCustomers() }))
+          .then(_ => setMsg('Customer was updated succesfully'))
+          .then(_ => setOpen(true))
+          .catch(err => console.error(err))
+  }
+
+  const addTraining = (newTraining) => {
+      fetch('https://customerrest.herokuapp.com/api/trainings', {
+          method: 'POST',
+          headers: { 'Content-type': 'application/json' },
+          body: JSON.stringify(newTraining)
+      })
+          .then(_ => gridRef.current.refreshCells({ rowNodes: getCustomers() }))
+          .then(_ => setMsg('Training was added succesfully'))
+          .then(_ => setOpen(true))
+          .catch(err => console.error(err))
+  }
+
+  const closeSnackbar = () => {
+      setOpen(false);
+  }
+
+  const columns = [
+      { headerName: 'Firstname', field: 'firstname', sortable: true, filter: true },
+      { headerName: 'Lastname', field: 'lastname', sortable: true, filter: true },
+      { headerName: 'Address', field: 'streetaddress', sortable: true, filter: true },
+      { headerName: 'Postcode', field: 'postcode', sortable: true, filter: true },
+      { headerName: 'City', field: 'city', sortable: true, filter: true },
+      { headerName: 'Email', field: 'email', sortable: true, filter: true },
+      { headerName: 'Phone', field: 'phone', sortable: true, filter: true },
+      {
+        headerName: '',
+        field: 'links.0.href',
+        cellRendererFramework: params => <AddTraining addTraining={addTraining} params={params} />
+      },
+      {
+        headerName: '',
+        field: 'links.0.href',
+        width: 90,
+        cellRendererFramework: params => <EditCustomer updateCustomer={updateCustomer} params={params} />
+      },
+      {
+        headerName: '',
+        field: 'links.0.href',
+        width: 90,
+        cellRendererFramework: params =>
+            <Button color="secondary" size="small" onClick={() => deleteCustomer(params.value)}>Delete</Button>
+      }
+  ]
+
+  return (
+    <div>
+      <AddCustomer addCustomer={addCustomer} />
+      <div className="ag-theme-material" style={{ height: '700px', width: '100%', margin: 'auto' }}>
+          <AgGridReact
+              suppressCellSelection={true}
+              ref={gridRef}
+              onGridReady={params => {
+                  gridRef.current = params.api
+              }}
+              columnDefs={columns}
+              rowData={customers}
+              pagination={true}
+              paginationPageSize={10}>
+          </AgGridReact>
+          <Snackbar
+              open={open}
+              autoHideDuration={3000}
+              onClose={closeSnackbar}
+              message={msg}
+          />
+      </div>
+    </div>
+  )
+}
+
+export default CustomersList
