@@ -8,8 +8,6 @@ import Snackbar from '@material-ui/core/Snackbar'
 
 import moment from 'moment'
 
-import AddTraining from './AddTraining'
-
 const TrainingsList = () => {
 
   const [trainings, setTrainings] = useState([])
