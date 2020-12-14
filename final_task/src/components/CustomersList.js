@@ -111,7 +111,7 @@ const CustomersList = () => {
   return (
     <div>
       <AddCustomer addCustomer={addCustomer} />
-      <div className="ag-theme-material" style={{ height: '700px', width: '100%', margin: 'auto' }}>
+      <div className="ag-theme-material" style={{ height: '700px', width: '95%', margin: 'auto' }}>
           <AgGridReact
               suppressCellSelection={true}
               ref={gridRef}
